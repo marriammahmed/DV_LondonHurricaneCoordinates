@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Hello World</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" ></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js" ></script>
+        <style>
+            body, html {
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            #map {
+                width: 100%;
+                height: 100vh;
+                position: absolute;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="map"></div>
+        <script>
+            var map = L.map("map").setView([51.505, -0.09], 13);
+
+            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                maxZoom: 19,
+            }).addTo(map);
+
+            L.marker([51.5, -0.09]).addTo(map)
+                .bindPopup("A pretty CSS3 popup.<br> Easily customizable.")
+
+            L.marker([51.52, -0.09]).addTo(map)
+                .bindPopup("A pretty CSS3 popup.<br> Easily customizable.")
+
+            var latlngs = [[51.5, -0.09], [51.52, -0.09]];
+            var polyline = L.polyline(latlngs, {color: "red"}).addTo(map);
+
+            fetch("hurricanes2020.csv")
+                .then(response => response.text())
+                .then(data => {
+                    let parsedData = Papa.parse(data, {header: true});
+                    console.log(parsedData);
+                });
+        </script>
+    </body>
+</html>
